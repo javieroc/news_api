@@ -1,0 +1,19 @@
+news_sites:
+  quepasasalta:
+    url: https://www.quepasasalta.com.ar
+    queries:
+      homepage_article_links: "article .title > a"
+      article_body: "h2.description"
+      article_title: ".main-article .title"
+#  eltribuno:
+#    url: https://www.eltribuno.com/salta
+#    queries:
+#      homepage_article_links: "article .title-item > a"
+#      article_body: ""
+#      article_title: ""
+#  informatesalta:
+#    url: http://informatesalta.com.ar
+#    queries:
+#      homepage_article_links: "article.noticia .titulo > a"
+#      article_body: ""
+#      article_title: ""
