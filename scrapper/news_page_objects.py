@@ -42,4 +42,9 @@ class ArticlePage(NewsPage):
   def body(self):
      result = self._select(self._queries['article_body'])
      return result[0].text if len(result) else ''
+
+  @property
+  def category(self):
+     result = self._select(self._queries['article_category'])
+     return result[0].text if len(result) else ''
  

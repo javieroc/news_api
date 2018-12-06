@@ -5,6 +5,7 @@ news_sites:
       homepage_article_links: "article .title > a"
       article_body: "h2.description"
       article_title: ".main-article .title"
+      article_category: ".main-article .section-title"
 #  eltribuno:
 #    url: https://www.eltribuno.com/salta
 #    queries:

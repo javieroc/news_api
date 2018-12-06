@@ -1,8 +1,13 @@
 import re
+import datetime
 import news_page_objects as news
 from common import config
 from requests.exceptions import HTTPError
 from urllib3.exceptions import MaxRetryError
+
+import sys
+sys.path.append("..") # Adds higher directory to python modules path.
+from db import db
 
 is_well_formed_link = re.compile(r'^https?://.+/.+$')
 is_root_path = re.compile(r'^/.+$')
@@ -19,11 +24,14 @@ def _news_scrapper():
       article = _fetch_article(news_site, host, link)
 
       if article:
-        print('Article fetched!!!')
-        articles.append(article)
-        print(article.title)
+        # articles.append(article)
+        db.news.insert_one({
+          "title": article.title,
+          "content": article.body,
+          "category": article.category,
+          "date": datetime.datetime.utcnow()
+        })
 
-    print(len(articles))
 
 def _fetch_article(news_site, host, link):
   article = None
