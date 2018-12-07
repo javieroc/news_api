@@ -43,13 +43,24 @@ class ArticlePage(NewsPage):
 
     @property
     def body(self):
-
+        texts = []
         result = self._select(self._queries['article_body'])
         for item in result:
+            if item.text is not None:
+                texts.append(item.text)
 
-        return result[0].text if len(result) else ''
+        return texts
 
     @property
     def category(self):
         result = self._select(self._queries['article_category'])
         return result[0].text if len(result) else ''
+
+    @property
+    def image(self):
+        result = self._select(self._queries['article_image'])
+        image_url = ''
+        for image in result:
+            if image.has_attr('vsmsrc'):
+                image_url = image['vsmsrc']
+        return image_url

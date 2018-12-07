@@ -3,10 +3,10 @@ news_sites:
     url: https://www.quepasasalta.com.ar
     queries:
       homepage_article_links: "article .title > a"
-      article_body: "h2.description"
+      article_body: ".content.vsmcontent p"
       article_title: ".main-article .title"
       article_category: ".main-article .section-title"
-      article_image: ".main-article .image img"
+      article_image: ".image > img"
 #  eltribuno:
 #    url: https://www.eltribuno.com/salta
 #    queries:
