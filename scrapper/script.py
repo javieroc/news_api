@@ -2,13 +2,9 @@ from db import db
 from urllib3.exceptions import MaxRetryError
 from requests.exceptions import HTTPError
 from common import config
+from utils import build_link
 import news_page_objects as news
 import datetime
-import re
-
-
-is_well_formed_link = re.compile(r'^https?://.+/.+$')
-is_root_path = re.compile(r'^/.+$')
 
 
 def _news_scrapper():
@@ -27,7 +23,7 @@ def _news_scrapper():
                     "title": article.title,
                     "content": article.body,
                     "category": article.category,
-                    "image": article.image,
+                    "image": build_link(host, article.image),
                     "date": datetime.datetime.utcnow()
                 })
 
@@ -35,7 +31,7 @@ def _news_scrapper():
 def _fetch_article(news_site, host, link):
     article = None
     try:
-        url = _build_link(host, link)
+        url = build_link(host, link)
         print('Start fetching article at {}'.format(url))
         article = news.ArticlePage(news_site, url)
     except (HTTPError, MaxRetryError):
@@ -46,15 +42,6 @@ def _fetch_article(news_site, host, link):
         return None
 
     return article
-
-
-def _build_link(host, link):
-    if is_well_formed_link.match(link):
-        return link
-    elif is_root_path.match(link):
-        return '{}{}'.format(host, link)
-    else:
-        return '{host}/{uri}'.format(host=host, uri=link)
 
 
 if __name__ == '__main__':
