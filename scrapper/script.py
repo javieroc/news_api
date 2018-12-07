@@ -1,3 +1,4 @@
+from db import db
 import re
 import datetime
 import news_page_objects as news
@@ -6,56 +7,57 @@ from requests.exceptions import HTTPError
 from urllib3.exceptions import MaxRetryError
 
 import sys
-sys.path.append("..") # Adds higher directory to python modules path.
-from db import db
+sys.path.append("..")  # Adds higher directory to python modules path.
 
 is_well_formed_link = re.compile(r'^https?://.+/.+$')
 is_root_path = re.compile(r'^/.+$')
 
+
 def _news_scrapper():
-  for n in config()['news_sites']:
-    news_site = config()['news_sites'][n]
+    for n in config()['news_sites']:
+        news_site = config()['news_sites'][n]
 
-    host = news_site['url']
-    homepage = news.HomePage(news_site, host)
+        host = news_site['url']
+        homepage = news.HomePage(news_site, host)
 
-    articles = []
-    for link in homepage.article_links:
-      article = _fetch_article(news_site, host, link)
+        articles = []
+        for link in homepage.article_links:
+            article = _fetch_article(news_site, host, link)
 
-      if article:
-        # articles.append(article)
-        db.news.insert_one({
-          "title": article.title,
-          "content": article.body,
-          "category": article.category,
-          "date": datetime.datetime.utcnow()
-        })
+            if article:
+                # articles.append(article)
+                db.news.insert_one({
+                    "title": article.title,
+                    "content": article.body,
+                    "category": article.category,
+                    "date": datetime.datetime.utcnow()
+                })
 
 
 def _fetch_article(news_site, host, link):
-  article = None
-  try:
-    url = _build_link(host, link)
-    print('Start fetching article at {}'.format(url))
-    article = news.ArticlePage(news_site, url)
-  except (HTTPError, MaxRetryError) as e:
-    print('Error while fetching article')
+    article = None
+    try:
+        url = _build_link(host, link)
+        print('Start fetching article at {}'.format(url))
+        article = news.ArticlePage(news_site, url)
+    except (HTTPError, MaxRetryError) as e:
+        print('Error while fetching article')
 
-  if article and not article.body:
-    print('Invalid Article. There is no body')
-    return None
+    if article and not article.body:
+        print('Invalid Article. There is no body')
+        return None
 
-  return article
+    return article
+
 
 def _build_link(host, link):
-  if is_well_formed_link.match(link):
-    return link
-  elif is_root_path.match(link):
-    return '{}{}'.format(host, link)
-  else:
-    return '{host}/{uri}'.format(host=host, uri=link)
+    if is_well_formed_link.match(link):
+        return link
+    elif is_root_path.match(link):
+        return '{}{}'.format(host, link)
+    else:
+        return '{host}/{uri}'.format(host=host, uri=link)
 
 
 if __name__ == '__main__':
-  _news_scrapper()
+    _news_scrapper()

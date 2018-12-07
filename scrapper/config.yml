@@ -6,6 +6,7 @@ news_sites:
       article_body: "h2.description"
       article_title: ".main-article .title"
       article_category: ".main-article .section-title"
+      article_image: ".main-article .image img"
 #  eltribuno:
 #    url: https://www.eltribuno.com/salta
 #    queries:
