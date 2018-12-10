@@ -17,15 +17,18 @@ def _news_scrapper():
         for link in homepage.article_links:
             article = _fetch_article(news_site, host, link)
 
-            if article:
-                # articles.append(article)
-                db.news.insert_one({
-                    "title": article.title,
-                    "content": article.body,
-                    "category": article.category,
-                    "image": build_link(host, article.image),
-                    "date": datetime.datetime.utcnow()
-                })
+            if article and article.title is not None:
+                if (db.news.find_one({"title": article.title}) is None):
+                    db.news.insert_one({
+                        "title": article.title,
+                        "content": article.body,
+                        "category": article.category,
+                        "image": build_link(host, article.image),
+                        "date": datetime.datetime.utcnow()
+                    })
+                else:
+                    print('Article already exists!')
+        print('Num of articles: {}'.format(db.news.count_documents({})))
 
 
 def _fetch_article(news_site, host, link):
