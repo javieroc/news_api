@@ -1,5 +1,9 @@
 import os
 from flask import Flask
+from pymongo import MongoClient
+
+client = MongoClient('mongodb://localhost:27017')
+db = client.newsdb
 
 
 def create_app(test_config=None):
