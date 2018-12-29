@@ -1,5 +1,5 @@
 import os
-from flask import Flask
+from flask import Flask, request
 from pymongo import MongoClient
 
 client = MongoClient('mongodb://localhost:27017')
@@ -17,3 +17,8 @@ def create_app(test_config=None):
     app.register_blueprint(news.bp)
 
     return app
+
+
+def get_arg(key, default):
+    arg = request.args.get(key)
+    return arg if arg else default
