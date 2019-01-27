@@ -8,6 +8,7 @@ RUN apt-get clean \
 
 RUN apt-get -y install nginx \
     && apt-get -y install python3-dev \
+    && apt-get -y install iputils-ping \
     && apt-get -y install build-essential
 
 RUN pip install -r requirements.txt --src /usr/local/src
