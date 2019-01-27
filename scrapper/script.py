@@ -1,4 +1,4 @@
-from db import db
+from db import db, client
 from urllib3.exceptions import MaxRetryError
 from requests.exceptions import HTTPError
 from common import config
@@ -33,6 +33,7 @@ def _news_scrapper():
                 else:
                     progress(index, total, 'Article already exists!')
             index += 1
+        client.close()
 
 
 def _fetch_article(news_site, host, link):
