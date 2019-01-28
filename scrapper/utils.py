@@ -6,7 +6,9 @@ is_root_path = re.compile(r'^/.+$')
 
 
 def build_link(host, link):
-    if is_well_formed_link.match(link):
+    if not link:
+        return link
+    elif is_well_formed_link.match(link):
         return link
     elif is_root_path.match(link):
         return '{}{}'.format(host, link)
