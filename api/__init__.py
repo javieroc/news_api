@@ -1,5 +1,6 @@
 import os
 from flask import Flask, request
+from flask_cors import CORS
 from pymongo import MongoClient
 
 client = MongoClient('mongodb://mongodb:27017', connect=False)
@@ -9,6 +10,7 @@ db = client.newsdb
 
 def create_app(test_config=None):
     app = Flask(__name__)
+    CORS(app)
 
     @app.route('/hello')
     def hello():
