@@ -1,5 +1,6 @@
 from flask import Blueprint, request
 from bson.json_util import dumps
+from bson.objectid import ObjectId
 import numpy as np
 from .. import db, get_arg
 
@@ -22,4 +23,13 @@ def get_news():
         "per_page": per_page,
         "pages": int(np.ceil(news_count / per_page)),
         "total": news_count
+    })
+
+
+@bp.route("/news/<id>", methods=["GET"])
+def get_provider(id):
+    new = db.news.find_one({"_id": ObjectId(id)})
+
+    return dumps({
+        "data": new
     })
